@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To Do List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>To Do List</h1>
+  <div class="container">
+    <p class="subtitle">Masukkan tugas atau aktivitas Anda di sini!</p>
+    
+    <div class="input-area">
+      <input type="text" id="taskInput" placeholder="Masukkan tugas Anda..." />
+      <button id="addBtn">Tambahkan Tugas</button>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Semua Tugas</button>
+      <button class="filter-btn" data-filter="completed">Tugas yang Selesai</button>
+      <button class="filter-btn" data-filter="pending">Tugas yang belum Selesai</button>
+    </div>
+
+    <div class="todo-table">
+      <div class="table-header">
+        <span class="task-col">Nama Tugas/Aktivitas</span>
+        <span class="actions-col">Aksi</span>
+      </div>
+      <ul id="todoList" class="todo-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
