@@ -1,4 +1,7 @@
+version: "3.9"
+
 services:
+  # === MySQL Database ===
   db:
     image: mysql:8
     container_name: mysql-db
@@ -11,8 +14,9 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  # === Todo App (Node.js) ===
   app:
-    build: .
+    image: bas911/todo-app:latest    # gunakan image dari Docker Hub
     container_name: todo-app
     restart: always
     ports:
@@ -25,6 +29,15 @@ services:
       DB_PORT: 3306
     depends_on:
       - db
+
+  # === Watchtower untuk auto update container ===
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30    # cek image baru setiap 30 detik
 
 volumes:
   db_data:
