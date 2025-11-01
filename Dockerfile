@@ -1,17 +1,17 @@
-# Gunakan Node.js versi stabil
+# Gunakan image Node.js versi terbaru
 FROM node:18
 
-# Tentukan folder kerja
+# Tentukan folder kerja di dalam container
 WORKDIR /app
 
-# Salin file project
+# Salin semua file project ke dalam container
 COPY . .
 
-# Install dependency
+# Install semua dependency
 RUN npm install
 
-# Expose port
+# Buka port 3000
 EXPOSE 3000
 
-# Jalankan app
+# Jalankan server.js
 CMD ["node", "server.js"]
