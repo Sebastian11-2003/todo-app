@@ -1,20 +1,17 @@
-# Gunakan image Node.js versi stabil
-FROM node:18-alpine
+# Gunakan Node.js versi stabil
+FROM node:18
 
-# Tentukan folder kerja di dalam container
+# Tentukan folder kerja
 WORKDIR /app
 
-# Salin file package.json dan package-lock.json terlebih dahulu (agar cache efisien)
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install --production
-
-# Salin semua file project ke container
+# Salin file project
 COPY . .
 
-# Expose port aplikasi
+# Install dependency
+RUN npm install
+
+# Expose port
 EXPOSE 3000
 
-# Jalankan server.js
+# Jalankan app
 CMD ["node", "server.js"]
