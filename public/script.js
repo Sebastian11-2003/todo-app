@@ -63,7 +63,7 @@ function createTodoElement(todo) {
 
   // Delete button
   const delBtn = document.createElement('button');
-  delBtn.innerHTML = 'Delete ☷';
+  delBtn.innerHTML = 'Hapus ☷';
   delBtn.className = 'delete';
   delBtn.onclick = () => deleteTodo(todo.id);
 
