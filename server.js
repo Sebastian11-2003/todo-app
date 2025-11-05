@@ -39,6 +39,7 @@ app.get('/todos', (req, res) => {
   });
 });
 
+// Tambah todo
 app.post('/todos', (req, res) => {
   const { task } = req.body;
   if (!task) return res.status(400).json({ error: 'Task is required' });
@@ -48,13 +49,24 @@ app.post('/todos', (req, res) => {
   });
 });
 
+// Update task atau status
 app.put('/todos/:id', (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
-  db.query('UPDATE todos SET status = ? WHERE id = ?', [status, id], (err) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Status updated' });
-  });
+  const { task, status } = req.body;
+
+  if (task !== undefined) {
+    db.query('UPDATE todos SET task = ? WHERE id = ?', [task, id], err => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: 'Task updated successfully' });
+    });
+  } else if (status !== undefined) {
+    db.query('UPDATE todos SET status = ? WHERE id = ?', [status, id], err => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: 'Status updated successfully' });
+    });
+  } else {
+    res.status(400).json({ error: 'No valid field to update' });
+  }
 });
 
 app.delete('/todos/:id', (req, res) => {
