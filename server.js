@@ -14,11 +14,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //NYAMBUNGIN KEDATABASE
 const db = mysql.createConnection({
-  host: 'host.docker.internal',
+  host: 'localhost',
   user: 'root',
   password: 'root',
   database: 'todo_db',
-  port: 3307
+  port: 3306
 });
 
 
@@ -26,7 +26,7 @@ db.connect(err => {
   if (err) {
     console.error('❌ Gagal koneksi ke MySQL:', err.message);
   } else {
-    console.log('✅ Terhubung ke MySQL Database di port 3307');
+    console.log('✅ Terhubung ke MySQL Database di port 3306');
   }
 });
 
