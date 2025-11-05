@@ -21,7 +21,9 @@ async function loadTodos() {
 // Render todos based on filter
 function render() {
   const filteredTodos = filterTodos();
+  
   todoList.innerHTML = '';
+  
   filteredTodos.forEach(todo => {
     const li = createTodoElement(todo);
     todoList.appendChild(li);
@@ -44,23 +46,28 @@ function createTodoElement(todo) {
   li.className = 'todo-item';
   if (todo.status) li.classList.add('completed');
 
+  // Task text
   const taskSpan = document.createElement('span');
   taskSpan.className = `task-text ${todo.status ? 'completed' : ''}`;
   taskSpan.textContent = todo.task;
 
+  // Actions container
   const actions = document.createElement('div');
   actions.className = 'actions';
 
+  // Edit button
   const editBtn = document.createElement('button');
   editBtn.innerHTML = 'Edit ☺';
   editBtn.className = 'edit';
   editBtn.onclick = () => enableEdit(taskSpan, todo.id);
 
+  // Delete button
   const delBtn = document.createElement('button');
   delBtn.innerHTML = 'Hapus ☷';
   delBtn.className = 'delete';
   delBtn.onclick = () => deleteTodo(todo.id);
 
+  // Toggle button
   const toggleBtn = document.createElement('button');
   toggleBtn.innerHTML = todo.status ? 'Set as undone ✓' : 'Set as done ✓';
   toggleBtn.className = 'toggle';
@@ -72,58 +79,43 @@ function createTodoElement(todo) {
 
   li.appendChild(taskSpan);
   li.appendChild(actions);
+  
   return li;
 }
 
-// === Inline Edit ===
+// Enable edit mode
 function enableEdit(spanElement, todoId) {
   const currentText = spanElement.textContent;
-
-  const editContainer = document.createElement('div');
-  editContainer.className = 'edit-container';
-
   const input = document.createElement('input');
   input.type = 'text';
   input.value = currentText;
   input.className = 'edit-input';
-
-  const saveBtn = document.createElement('button');
-  saveBtn.textContent = 'Save 💾';
-  saveBtn.className = 'save-btn';
-
-  const cancelBtn = document.createElement('button');
-  cancelBtn.textContent = 'Cancel ✖';
-  cancelBtn.className = 'cancel-btn';
-
-  editContainer.appendChild(input);
-  editContainer.appendChild(saveBtn);
-  editContainer.appendChild(cancelBtn);
-  spanElement.replaceWith(editContainer);
+  
+  spanElement.replaceWith(input);
   input.focus();
 
-  async function saveEdit() {
+  const saveEdit = async () => {
     const newText = input.value.trim();
-    if (!newText) return alert('Task cannot be empty!');
-    if (newText === currentText) {
-      editContainer.replaceWith(createTaskSpan(currentText));
-      return;
+    if (newText && newText !== currentText) {
+      try {
+        await fetch(`${API}/${todoId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ task: newText })
+        });
+        await loadTodos();
+      } catch (error) {
+        alert('Error updating task');
+      }
+    } else {
+      input.replaceWith(createTaskSpan(currentText));
     }
+  };
 
-    try {
-      await fetch(`${API}/${todoId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task: newText })
-      });
-      await loadTodos();
-    } catch (error) {
-      alert('Error updating task');
-    }
-  }
-
-  saveBtn.addEventListener('click', saveEdit);
-  input.addEventListener('keypress', e => { if (e.key === 'Enter') saveEdit(); });
-  cancelBtn.addEventListener('click', () => editContainer.replaceWith(createTaskSpan(currentText)));
+  input.addEventListener('blur', saveEdit);
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') saveEdit();
+  });
 }
 
 function createTaskSpan(text) {
@@ -133,10 +125,11 @@ function createTaskSpan(text) {
   return span;
 }
 
-// Tambah todo
+// Add new todo
 addBtn.addEventListener('click', async () => {
   const task = taskInput.value.trim();
   if (!task) return alert('Please enter a task!');
+  
   try {
     await fetch(API, {
       method: 'POST',
@@ -164,9 +157,10 @@ async function toggleStatus(id, current) {
   }
 }
 
-// Hapus todo
+// Delete todo
 async function deleteTodo(id) {
   if (!confirm('Delete this task?')) return;
+  
   try {
     await fetch(`${API}/${id}`, { method: 'DELETE' });
     await loadTodos();
@@ -175,7 +169,7 @@ async function deleteTodo(id) {
   }
 }
 
-// Filter
+// Filter functionality
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -185,5 +179,5 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// Init
+// Initialize
 loadTodos();
