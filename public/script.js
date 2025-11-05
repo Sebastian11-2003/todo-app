@@ -55,12 +55,6 @@ function createTodoElement(todo) {
   const actions = document.createElement('div');
   actions.className = 'actions';
 
-  // Edit button
-  const editBtn = document.createElement('button');
-  editBtn.innerHTML = 'Edit ☺';
-  editBtn.className = 'edit';
-  editBtn.onclick = () => enableEdit(taskSpan, todo.id);
-
   // Delete button
   const delBtn = document.createElement('button');
   delBtn.innerHTML = 'Hapus ☷';
