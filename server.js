@@ -18,7 +18,7 @@ const db = mysql.createConnection({
   user: 'root',
   password: 'root',
   database: 'todo_db',
-  port: 3306
+  port: 3307
 });
 
 
