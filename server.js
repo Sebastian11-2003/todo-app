@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //NYAMBUNGIN KEDATABASE
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: 'host.docker.internal',
   user: 'root',
   password: 'root',
   database: 'todo_db',
