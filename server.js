@@ -22,11 +22,12 @@ const db = mysql.createConnection({
 });
 
 
+
 db.connect(err => {
   if (err) {
     console.error('❌ Gagal koneksi ke MySQL:', err.message);
   } else {
-    console.log('✅ Terhubung ke MySQL Database di port 3307');
+    console.log('✅ Terhubung ke MySQL Database di port 3306');
   }
 });
 

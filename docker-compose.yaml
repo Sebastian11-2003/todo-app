@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-  # === MySQL Database ===
   db:
     image: mysql:8
     container_name: mysql-db
@@ -16,7 +15,7 @@ services:
 
   # === Todo App (Node.js) ===
   app:
-    image: bas911/todo-app:latest    # gunakan image dari Docker Hub
+    image: bas911/todo-app:latest
     container_name: todo-app
     restart: always
     ports:
