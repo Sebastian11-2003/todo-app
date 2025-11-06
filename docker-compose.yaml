@@ -15,7 +15,7 @@ services:
 
   # === Todo App (Node.js) ===
   app:
-    image: bas911/todo-app:master
+    image: bas911/todo-app:latest
     container_name: todo-app
     restart: always
     ports:
