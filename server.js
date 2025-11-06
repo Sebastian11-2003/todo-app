@@ -5,34 +5,31 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// === KONFIGURASI DATABASE ===
-const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'root',
-  database: process.env.DB_NAME || 'todo_db',
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306
-};
-
-// === KONEKSI KE DATABASE ===
-const db = mysql.createConnection(dbConfig);
+// NYAMBUNGIN KEDATABASE
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'todo_db',
+  port: 3306
+});
 
 db.connect(err => {
   if (err) {
     console.error('❌ Gagal koneksi ke MySQL:', err.message);
   } else {
-    console.log(`✅ Terhubung ke MySQL di host ${dbConfig.host}:${dbConfig.port}`);
+    console.log('✅ Terhubung ke MySQL Database di port 3306');
   }
 });
 
-// === ROUTES ===
+// RUTE
 app.get('/todos', (req, res) => {
   db.query('SELECT * FROM todos ORDER BY id DESC', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
