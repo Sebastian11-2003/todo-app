@@ -1,4 +1,3 @@
-require('dotenv').config(); // baca file .env
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
@@ -6,37 +5,31 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Deteksi apakah sedang di Docker
-const isDocker = process.env.DOCKER_ENV === 'true';
-
-// Tentukan host database otomatis
-const DB_HOST = isDocker ? 'db' : process.env.DB_HOST;
-
-// Koneksi ke database
+// NYAMBUNGIN KEDATABASE
 const db = mysql.createConnection({
-  host: DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'todo_db',
+  port: 3306
 });
 
 db.connect(err => {
   if (err) {
     console.error('❌ Gagal koneksi ke MySQL:', err.message);
   } else {
-    console.log(`✅ Terhubung ke MySQL Database di host ${DB_HOST}:${process.env.DB_PORT}`);
+    console.log('✅ Terhubung ke MySQL Database di port 3306');
   }
 });
 
-// === RUTE ===
+// RUTE
 app.get('/todos', (req, res) => {
   db.query('SELECT * FROM todos ORDER BY id DESC', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
